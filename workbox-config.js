@@ -1,5 +1,5 @@
 module.exports = {
-  "globDirectory": "../docs/",
+  "globDirectory": "docs/",
   "inlineWorkboxRuntime": true,
   "globPatterns": [
     "**/*.{ico,html,css,js}",
@@ -9,7 +9,7 @@ module.exports = {
     "manifest.json",
     "assets/*.js"
   ],
-  "swDest": "../docs/sw.js",
+  "swDest": "docs/sw.js",
 
   // Define runtime caching rules.
   runtimeCaching: [{
