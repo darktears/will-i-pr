@@ -10,7 +10,7 @@ import './setup-panel.js';
 import './race-panel.js';
 import './main-header.js';
 import { setBasePath } from '@shoelace-style/shoelace/dist/utilities/base-path.js';
-setBasePath('/');
+setBasePath('/docs/');
 
 export class MainApplication extends LitElement {
   static styles = css`
