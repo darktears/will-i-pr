@@ -40,7 +40,7 @@ export class RacePanel extends LitElement {
 
         .splits {
             width: 100%;
-            height: 40%;
+            height: 35%;
             border-top: solid 2px white;
         }
 
@@ -101,7 +101,7 @@ export class RacePanel extends LitElement {
             flex-direction: column;
             justify-content: center;
             align-items: center;
-            height: 10%;
+            height: 15%;
             border-top: solid 2px white;
         }
 
@@ -112,6 +112,10 @@ export class RacePanel extends LitElement {
 
         .overall-ahead {
             width: 50%;
+        }
+
+        .projected-header {
+            margin-top: 10px;
         }
 
         .projected-legend {
@@ -349,7 +353,7 @@ export class RacePanel extends LitElement {
                         </div>
                     </div>
                     <div class="projected-time">
-                        Projected Finish Time
+                        <div class="projected-header">Projected Finish Time</div>
                         <div id="projected-time" class="time">00 : 00 : 00 : 000</div>
                         <div class="projected-legend">
                             <div class="overall-ahead" id="overall-ahead"></div>
