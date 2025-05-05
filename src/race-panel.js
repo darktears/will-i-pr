@@ -36,14 +36,17 @@ export class RacePanel extends LitElement {
 
         .split {
             margin-top: 5px;
+            flex-basis: min-content;
         }
 
         .splits {
             width: 100%;
             height: 35%;
             border-top: solid 2px white;
-            margin-left: 5px;
-            margin-right: 5px;
+            padding-top: 5px;
+            padding-left: 5px;
+            padding-right: 5px;
+            overflow-y: scroll;
         }
 
         .timer {
@@ -76,6 +79,7 @@ export class RacePanel extends LitElement {
         }
 
         #startButton {
+            touch-action: manipulation;
             background-color: var(--sl-color-green-500);
             border: solid 1px var(--sl-color-green-200);
             color: white;
@@ -88,6 +92,7 @@ export class RacePanel extends LitElement {
         }
 
         #lapButton {
+            touch-action: manipulation;
             background-color: var(--sl-color-teal-500);
             border: solid 1px var(--sl-color-teal-200);
             color: white;
@@ -102,6 +107,7 @@ export class RacePanel extends LitElement {
         }
 
         #resetButton {
+            touch-action: manipulation;
             background-color: var(--sl-color-red-500);
             border: solid 1px var(--sl-color-red-200);
             color: white;
@@ -133,6 +139,8 @@ export class RacePanel extends LitElement {
             align-items: center;
             height: 15%;
             border-top: solid 2px white;
+            margin-top: 5px;
+            margin-bottom: 5px;
         }
 
         .current-pr {
@@ -161,7 +169,15 @@ export class RacePanel extends LitElement {
         .split-header {
             font-size: 1.5rem;
             margin-top: 10px;
-            margin-bottom: 20px;
+            margin-bottom: 10px;
+            height: 10%;
+        }
+
+        .split-list {
+            width: 100%;
+            height: 20vh;
+            display: flex;
+            flex-direction: column;
         }
     `;
 
@@ -394,9 +410,11 @@ export class RacePanel extends LitElement {
                     </div>
                     <div class="splits">
                         <div class="split-header">Splits</div>
-                        ${this.splits.map((time, i) => html`
-                            <div class="split">${++i} - ${this._formatTime(time)} - ${this._computePaceinMiles(--i)}</div>
-                        `)}
+                        <div class="split-list">
+                            ${this.splits.map((time, i) => html`
+                                <div class="split">${++i} - ${this._formatTime(time)} - ${this._computePaceinMiles(--i)}</div>
+                            `)}
+                        </div>
                     </div>
                 </div>
             </div>

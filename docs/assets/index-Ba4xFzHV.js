@@ -2739,9 +2739,11 @@ In order to be iterable, non-array objects must have a [Symbol.iterator]() metho
                     </div>
                     <div class="splits">
                         <div class="split-header">Splits</div>
-                        ${this.splits.map((i,o)=>k`
-                            <div class="split">${++o} - ${this._formatTime(i)} - ${this._computePaceinMiles(--o)}</div>
-                        `)}
+                        <div class="split-list">
+                            ${this.splits.map((i,o)=>k`
+                                <div class="split">${++o} - ${this._formatTime(i)} - ${this._computePaceinMiles(--o)}</div>
+                            `)}
+                        </div>
                     </div>
                 </div>
             </div>
@@ -2776,14 +2778,17 @@ In order to be iterable, non-array objects must have a [Symbol.iterator]() metho
 
         .split {
             margin-top: 5px;
+            flex-basis: min-content;
         }
 
         .splits {
             width: 100%;
             height: 35%;
             border-top: solid 2px white;
-            margin-left: 5px;
-            margin-right: 5px;
+            padding-top: 5px;
+            padding-left: 5px;
+            padding-right: 5px;
+            overflow-y: scroll;
         }
 
         .timer {
@@ -2816,6 +2821,7 @@ In order to be iterable, non-array objects must have a [Symbol.iterator]() metho
         }
 
         #startButton {
+            touch-action: manipulation;
             background-color: var(--sl-color-green-500);
             border: solid 1px var(--sl-color-green-200);
             color: white;
@@ -2828,6 +2834,7 @@ In order to be iterable, non-array objects must have a [Symbol.iterator]() metho
         }
 
         #lapButton {
+            touch-action: manipulation;
             background-color: var(--sl-color-teal-500);
             border: solid 1px var(--sl-color-teal-200);
             color: white;
@@ -2842,6 +2849,7 @@ In order to be iterable, non-array objects must have a [Symbol.iterator]() metho
         }
 
         #resetButton {
+            touch-action: manipulation;
             background-color: var(--sl-color-red-500);
             border: solid 1px var(--sl-color-red-200);
             color: white;
@@ -2873,6 +2881,8 @@ In order to be iterable, non-array objects must have a [Symbol.iterator]() metho
             align-items: center;
             height: 15%;
             border-top: solid 2px white;
+            margin-top: 5px;
+            margin-bottom: 5px;
         }
 
         .current-pr {
@@ -2901,7 +2911,15 @@ In order to be iterable, non-array objects must have a [Symbol.iterator]() metho
         .split-header {
             font-size: 1.5rem;
             margin-top: 10px;
-            margin-bottom: 20px;
+            margin-bottom: 10px;
+            height: 10%;
+        }
+
+        .split-list {
+            width: 100%;
+            height: 20vh;
+            display: flex;
+            flex-direction: column;
         }
     `);customElements.define("race-panel",co);class uo extends ct{constructor(){super();T(this,"_isMainScreen");this._isMainScreen=!0}static get properties(){return{isMainScreen:{type:Boolean,reflectToAttribute:!0,attribute:!0}}}set isMainScreen(i){let o=this._isMainScreen;this._isMainScreen=i,this.requestUpdate("isMainScreen",o)}get isMainScreen(){return this._isMainScreen}_backClicked(){this.dispatchEvent(new CustomEvent("back-clicked",{bubbles:!0,composed:!0})),this.isMainScreen=!0}firstUpdated(){}render(){return k`
     <div class="root">
