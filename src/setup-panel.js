@@ -44,9 +44,11 @@ export class SetupPanel extends LitElement {
         .content-item {
             display: flex;
             flex-direction: row;
-            justify-content: center;
             align-items: center;
+            margin-left: 10px;
+            margin-right: 10px;
             margin-bottom: 20px;
+            width: 90%;
         }
 
         .pr-panel-title {
@@ -54,8 +56,13 @@ export class SetupPanel extends LitElement {
             width: 90%;
         }
 
+        #distance {
+            width: 90%;
+        }
+
         sl-input {
             width: 30%;
+            margin: 2px;
         }
 
         sl-button {
@@ -145,8 +152,6 @@ export class SetupPanel extends LitElement {
                 <div class="content">
                     <div class="content-item">
                         <div class="pr-panel-title">Select Distance:</div>
-                    </div>
-                    <div class="content-item">
                         <sl-select id="distance" placeholder="Select one" size="large" value="1600">
                             <sl-option value="800">800m</sl-option>
                             <sl-option value="1500">1500m</sl-option>
