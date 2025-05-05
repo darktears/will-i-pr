@@ -42,6 +42,8 @@ export class RacePanel extends LitElement {
             width: 100%;
             height: 35%;
             border-top: solid 2px white;
+            margin-left: 5px;
+            margin-right: 5px;
         }
 
         .timer {
@@ -55,7 +57,7 @@ export class RacePanel extends LitElement {
         }
 
         .rounded-time {
-            border: solid 4px #07b31b;
+            border: solid 4px var(--sl-color-green-500);
             border-radius: 50%;
             width: 300px;
             height: 300px;
@@ -74,8 +76,8 @@ export class RacePanel extends LitElement {
         }
 
         #startButton {
-            background-color: #07b31b;
-            border: solid 1px #069a17;
+            background-color: var(--sl-color-green-500);
+            border: solid 1px var(--sl-color-green-200);
             color: white;
             border-radius: 10px;
             width: 50%;
@@ -83,6 +85,34 @@ export class RacePanel extends LitElement {
             flex-direction: row;
             justify-content: center;
             align-items: center;
+        }
+
+        #lapButton {
+            background-color: var(--sl-color-teal-500);
+            border: solid 1px var(--sl-color-teal-200);
+            color: white;
+            border-radius: 10px;
+            width: 25%;
+            display: flex;
+            flex-direction: row;
+            justify-content: center;
+            align-items: center;
+            margin-left: 10px;
+            margin-right: 5px;
+        }
+
+        #resetButton {
+            background-color: var(--sl-color-red-500);
+            border: solid 1px var(--sl-color-red-200);
+            color: white;
+            border-radius: 10px;
+            width: 25%;
+            display: flex;
+            flex-direction: row;
+            justify-content: center;
+            align-items: center;
+            margin-right: 10px;
+            margin-left: 5px;
         }
 
         .timer-buttons sl-icon-button::part(base):hover,
@@ -363,10 +393,10 @@ export class RacePanel extends LitElement {
                         </div>
                     </div>
                     <div class="splits">
-                    <div class="split-header">Splits</div>
-                    ${this.splits.map((time, i) => html`
-                        <div class="split">${++i} - ${this._formatTime(time)} - ${this._computePaceinMiles(--i)}</div>
-                    `)}
+                        <div class="split-header">Splits</div>
+                        ${this.splits.map((time, i) => html`
+                            <div class="split">${++i} - ${this._formatTime(time)} - ${this._computePaceinMiles(--i)}</div>
+                        `)}
                     </div>
                 </div>
             </div>

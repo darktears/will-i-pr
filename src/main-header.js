@@ -20,7 +20,7 @@ static styles = css`
     }
 
     .root {
-        background-color: #069a17;
+        background-color: var(--sl-color-green-400);
         font-size: 1.5rem;
         text-align: center;
         font-style: italic;

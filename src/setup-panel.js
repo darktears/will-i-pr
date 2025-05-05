@@ -17,6 +17,19 @@ export class SetupPanel extends LitElement {
             background-color: black;
             width: 100%;
             height: 100%;
+            --sl-color-primary-50: var(--sl-color-green-50);
+            --sl-color-primary-100: var(--sl-color-green-100);
+            --sl-color-primary-200: var(--sl-color-green-200);
+            --sl-color-primary-300: var(--sl-color-green-300);
+            --sl-color-primary-400: var(--sl-color-green-400);
+            --sl-color-primary-500: var(--sl-color-green-500);
+            --sl-color-primary-600: var(--sl-color-green-600);
+            --sl-color-primary-700: var(--sl-color-green-700);
+            --sl-color-primary-800: var(--sl-color-green-800);
+            --sl-color-primary-900: var(--sl-color-green-900);
+            --sl-color-primary-950: var(--sl-color-green-950);
+            --sl-input-focus-ring-color: hsl(141.1 64.9% 43% / 40%);
+            --sl-input-border-color-focus: var(--sl-color-green-600);
         }
 
         .content {
@@ -45,9 +58,9 @@ export class SetupPanel extends LitElement {
             width: 30%;
         }
 
-        sl-button::part(base) {
-            background-color: #07b31b;
-            border-color: #069a17;
+        sl-button {
+            margin-left: 5px;
+            margin-right: 5px;
         }
     `;
 
