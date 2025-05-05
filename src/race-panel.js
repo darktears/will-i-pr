@@ -86,7 +86,7 @@ export class RacePanel extends LitElement {
         }
 
         .timer-buttons sl-icon-button::part(base):hover,
-        .icon-button-color sl-icon-button::part(base):focus {
+        .timer-buttons sl-icon-button::part(base):focus {
             color: white;
         }
 
@@ -225,16 +225,17 @@ export class RacePanel extends LitElement {
         this._lapButton.disabled = false;
     }
 
-    _resetRace() {
+    resetRace() {
         clearInterval(this._timer);
         this._elapsedTime = 0;
         this.splits = [];
         this._aboluteSplits = [];
         this._numberOfLapsLeft = Math.round(this.distance / 400);
-        this._elapsedTimer.innerHTML = ` 00 : 00 : 00 : 000`;
+        this._elapsedTimer.innerHTML = ` 00 : 00 : 00 : 00`;
         this._lapButton.disabled = true;
-        this._startButton.disabled = false;
-        this._projectedTime.innerHTML = ` 00 : 00 : 00 : 000`;
+        this._projectedTime.innerHTML = ` 00 : 00 : 00 : 00`;
+        this._startButton.name = "play-circle";
+        this._startButton.label = "start";
     }
 
     _updateTimerDisplay() {
@@ -336,7 +337,8 @@ export class RacePanel extends LitElement {
         let m = Math.floor((time % 3600000) / 60000);
         let s = Math.floor((time % 60000) / 1000);
         let ms = time % 1000;
-        return `${h < 10 ? "0" + h : h} : ${m < 10 ? "0" + m : m} : ${s < 10 ? "0" + s : s} : ${ms < 10 ? "00" + ms : ms < 100 ? "0" + ms : ms}`;
+        ms = ms / 10;
+        return `${h < 10 ? "0" + h : h} : ${m < 10 ? "0" + m : m} : ${s < 10 ? "0" + s : s} : ${ms < 10 ? "0" + ms : ms < 100 ? "" + ms : ms}`;
     }
 
     render() {
@@ -345,16 +347,16 @@ export class RacePanel extends LitElement {
                 <div class="content">
                     <div class="header">Distance: ${this.distance}</div>
                     <div class="timer">
-                        <div class="rounded-time" id="elapsedTimer">00 : 00 : 00 : 000</div>
+                        <div class="rounded-time" id="elapsedTimer">00 : 00 : 00 : 00</div>
                         <div class="timer-buttons">
-                            <sl-icon-button name="arrow-clockwise" @click="${this._resetRace}" disabled id="resetButton" label="reset"></sl-icon-button>
+                            <sl-icon-button name="arrow-clockwise" @click="${this.resetRace}" disabled id="resetButton" label="reset"></sl-icon-button>
                             <sl-icon-button name="play-circle" @click="${this._startRace}" id="startButton" label="start"></sl-icon-button>
                             <sl-icon-button name="stopwatch" @click="${this._lap}" id="lapButton" label="lap"></sl-icon-button>
                         </div>
                     </div>
                     <div class="projected-time">
                         <div class="projected-header">Projected Finish Time</div>
-                        <div id="projected-time" class="time">00 : 00 : 00 : 000</div>
+                        <div id="projected-time" class="time">00 : 00 : 00 : 00</div>
                         <div class="projected-legend">
                             <div class="overall-ahead" id="overall-ahead"></div>
                             <div class="current-pr">Current PR: ${this._formatTime(this.pr)}</div>

@@ -52,6 +52,9 @@ export class MainApplication extends LitElement {
   _swAlert;
   _wb;
   _wbRegistration = undefined;
+  _mainHeader;
+  _setupPanel;
+  _racePanel;
 
   static get properties() {
     return { viewportWidth: { type: String}, viewportHeight: { type: String} };
@@ -70,8 +73,9 @@ export class MainApplication extends LitElement {
       });
     }
 
-    this._selectDistancePanel = this.shadowRoot.querySelector('select-distance-panel');
+    this._setupPanel = this.shadowRoot.querySelector('setup-panel');
     this._racePanel = this.shadowRoot.querySelector('race-panel');
+    this._mainHeader = this.shadowRoot.querySelector('main-header');
   }
 
   constructor() {
@@ -97,15 +101,21 @@ export class MainApplication extends LitElement {
 
   _distanceChanged(event) {
     this._racePanel.distance = event.detail.distance;
+    this._mainHeader.isMainScreen = false;
   }
 
   _prChanged(event) {
     this._racePanel.pr = event.detail.pr;
   }
 
+  _backClicked() {
+    this._setupPanel.style.display = "block";
+    this._racePanel.resetRace();
+  }
+
   render() {
     return html`
-      <main-header></main-header> 
+      <main-header @back-clicked="${this._backClicked}"></main-header> 
       <setup-panel @distance-changed="${this._distanceChanged}" @pr-changed="${this._prChanged}"></setup-panel>
       <race-panel></race-panel>
       <div class="alert-sw">
