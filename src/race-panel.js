@@ -13,25 +13,21 @@ export class RacePanel extends LitElement {
         }
 
         .root {
-            width: 100%;
-            height: 100%;
-        }
-
-        .content {
-            width: 100%;
-            height: 100%;
+            width: 100vw;
+            height: 100vh;
             display: flex;
             flex-direction: column;
         }
 
         .header {
-            width: 100%;
+            width: 100vw;
             font-size: 1.5rem;
-            height: 5%;
+            height: 10vh;
             display: flex;
             flex-direction: column;
             justify-content: center;
             align-items: center;
+            margin-top: 10px;
         }
 
         .split {
@@ -40,10 +36,9 @@ export class RacePanel extends LitElement {
         }
 
         .splits {
-            width: 100%;
-            height: 35%;
+            width: 100vw;
+            min-height: 20vh;
             border-top: solid 2px white;
-            padding-top: 5px;
             padding-left: 5px;
             padding-right: 5px;
             overflow-y: scroll;
@@ -56,7 +51,7 @@ export class RacePanel extends LitElement {
             flex-direction: column;
             justify-content: center;
             align-items: center;
-            height: 55%;
+            height: 45vh;
         }
 
         .rounded-time {
@@ -132,28 +127,34 @@ export class RacePanel extends LitElement {
 
         .projected-time {
             width: 100%;
-            font-size: 1.5rem;
+            font-size: 1.3rem;
             display: flex;
             flex-direction: column;
-            justify-content: center;
             align-items: center;
-            height: 15%;
+            height: 10vh;
             border-top: solid 2px white;
             margin-top: 5px;
             margin-bottom: 5px;
         }
 
         .current-pr {
-            width: 50%;
-            color: #99a49b;
+            color: var(--sl-color-red-400);
+            font-size: 1.2rem;
+        }
+
+        .projected-pace {
+            color: var(--sl-color-green-600);
+            font-size: 1.2rem;
         }
 
         .overall-ahead {
-            width: 50%;
+            width: 100%;
+            font-size: 1.2rem;
+            text-align: center;
         }
 
         .projected-header {
-            margin-top: 10px;
+            margin-top: 5px;
         }
 
         .projected-legend {
@@ -163,7 +164,7 @@ export class RacePanel extends LitElement {
             justify-content: center;
             align-items: center;
             font-size: 1rem;
-            margin-top: 20px;
+            margin-top: 10px;
         }
 
         .split-header {
@@ -280,6 +281,7 @@ export class RacePanel extends LitElement {
         this._elapsedTimer.innerHTML = ` 00 : 00 : 00 : 00`;
         this._lapButton.disabled = true;
         this._projectedTime.innerHTML = ` 00 : 00 : 00 : 00`;
+        this._overallAhead.innerHTML = `Ahead: 00 : 00 : 00 : 00`;
         this._startButton.name = "play-circle";
         this._startButton.label = "start";
     }
@@ -355,20 +357,35 @@ export class RacePanel extends LitElement {
         const split = this._splits[splitIndex];
         let distanceMiles;
         if (this._distance === '1500' && splitIndex === 0) {
-            // 1 mile is approximately 1609.34 meters
-            console.log('1500');
-            distanceMiles = 300 / 1609.34;
+            // 1 mile is approximately 1609.344 meters
+            distanceMiles = 300 / 1609.344;
         } else if (this._distance === '3000' && splitIndex === 0) {
-            // 1 mile is approximately 1609.34 meters
-            distanceMiles = 200 / 1609.34;
+            distanceMiles = 200 / 1609.344;
         } else {
-            // 1 mile is approximately 1609.34 meters
-            distanceMiles = 400 / 1609.34;
+            distanceMiles = 400 / 1609.344;
         }
         // Convert milliseconds to minutes
         const timeMin = split / (1000 * 60);
 
-        const paceMinPerMile = timeMin / distanceMiles;
+        const paceMinPerMile = timeMin / distanceMiles.toFixed(1);
+        const minutes = Math.floor(paceMinPerMile);
+        const secondsDecimal = (paceMinPerMile - minutes) * 60;
+        const seconds = Math.round(secondsDecimal);
+
+        const formattedSeconds = seconds < 10 ? `0${seconds}` : `${seconds}`;
+
+        return `${minutes}:${formattedSeconds} min/mile`;
+    }
+
+    _computePaceinMilesFromDistance(distance, time) {
+        if (distance === 0 || time === 0) {
+            return '00:00 min/mile';
+        }
+        const distanceMiles = Number(distance) / 1609.344;
+        // Convert milliseconds to minutes
+        const timeMin = time / (1000 * 60);
+
+        const paceMinPerMile = timeMin / distanceMiles.toFixed(1);
         const minutes = Math.floor(paceMinPerMile);
         const secondsDecimal = (paceMinPerMile - minutes) * 60;
         const seconds = Math.round(secondsDecimal);
@@ -390,31 +407,32 @@ export class RacePanel extends LitElement {
     render() {
         return html`
             <div class="root">
-                <div class="content">
-                    <div class="header">Distance: ${this.distance}</div>
-                    <div class="timer">
-                        <div class="rounded-time" id="elapsedTimer">00 : 00 : 00 : 00</div>
-                        <div class="timer-buttons">
-                            <sl-icon-button name="arrow-clockwise" @click="${this.resetRace}" disabled id="resetButton" label="reset"></sl-icon-button>
-                            <sl-icon-button name="play-circle" @click="${this._startRace}" id="startButton" label="start"></sl-icon-button>
-                            <sl-icon-button name="stopwatch" @click="${this._lap}" id="lapButton" label="lap"></sl-icon-button>
-                        </div>
+                <div class="header">
+                    Distance: ${this.distance}
+                    <div class="current-pr">Current PR: ${this._formatTime(this.pr)}</div>
+                    <div class="projected-pace">Average pace: ${this._computePaceinMilesFromDistance(this.distance, this.pr)}</div>
+                </div>
+                <div class="timer">
+                    <div class="rounded-time" id="elapsedTimer">00 : 00 : 00 : 00</div>
+                    <div class="timer-buttons">
+                        <sl-icon-button name="arrow-clockwise" @click="${this.resetRace}" disabled id="resetButton" label="reset"></sl-icon-button>
+                        <sl-icon-button name="play-circle" @click="${this._startRace}" id="startButton" label="start"></sl-icon-button>
+                        <sl-icon-button name="stopwatch" @click="${this._lap}" id="lapButton" label="lap"></sl-icon-button>
                     </div>
-                    <div class="projected-time">
-                        <div class="projected-header">Projected Finish Time</div>
-                        <div id="projected-time" class="time">00 : 00 : 00 : 00</div>
-                        <div class="projected-legend">
-                            <div class="overall-ahead" id="overall-ahead"></div>
-                            <div class="current-pr">Current PR: ${this._formatTime(this.pr)}</div>
-                        </div>
+                </div>
+                <div class="projected-time">
+                    <div class="projected-header">Projected Finish Time</div>
+                    <div id="projected-time" class="time">00 : 00 : 00 : 00</div>
+                    <div class="projected-legend">
+                        <div class="overall-ahead" id="overall-ahead">Ahead: 00 : 00 : 00 : 00</div>
                     </div>
-                    <div class="splits">
-                        <div class="split-header">Splits</div>
-                        <div class="split-list">
-                            ${this.splits.map((time, i) => html`
-                                <div class="split">${++i} - ${this._formatTime(time)} - ${this._computePaceinMiles(--i)}</div>
-                            `)}
-                        </div>
+                </div>
+                <div class="splits">
+                    <div class="split-header">Splits</div>
+                    <div class="split-list">
+                        ${this.splits.map((time, i) => html`
+                            <div class="split">${++i} - ${this._formatTime(time)} - ${this._computePaceinMiles(--i)}</div>
+                        `)}
                     </div>
                 </div>
             </div>
