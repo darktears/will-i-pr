@@ -237,6 +237,7 @@ export class RacePanel extends LitElement {
     _splits = [];
     _absoluteSplits = [];
     _elapsedTime;
+    _wakeLock;
 
     constructor() {
         super();
@@ -256,13 +257,18 @@ export class RacePanel extends LitElement {
         this._numberOfLapsLeft = Math.round(this.distance / 400);
     }
 
-    _startRace() {
+    async _startRace() {
         if (this._timer != null) {
             clearInterval(this._timer);
             this._timer = null;
             this._startButton.name = "play-circle";
             this._startButton.label = "start";
             this._lapButton.disabled = true;
+            if (this._wakeLock) {
+                this._wakeLock.release().then(() => {
+                    this._wakeLock = null;
+                });
+            }
             return;
         }
         this._timer = setInterval(() => this._updateTimerDisplay(), 10);
@@ -270,13 +276,24 @@ export class RacePanel extends LitElement {
         this._startButton.label = "pause";
         this._resetButton.disabled = false;
         this._lapButton.disabled = false;
+        if ("wakeLock" in navigator) {
+            console.log("wakeLock is supported");
+            if (this._wakeLock === null) {
+                try {
+                    this._wakeLock = await navigator.wakeLock.request("screen");
+                    console.log("Wake Lock is active");
+                } catch (err) {
+                    console.log("Error while trying to request Wake Lock : " + err);
+                }
+            }
+        }
     }
 
     resetRace() {
         clearInterval(this._timer);
         this._elapsedTime = 0;
         this.splits = [];
-        this._aboluteSplits = [];
+        this._absoluteSplits = [];
         this._numberOfLapsLeft = Math.round(this.distance / 400);
         this._elapsedTimer.innerHTML = ` 00 : 00 : 00 : 00`;
         this._lapButton.disabled = true;
@@ -284,6 +301,11 @@ export class RacePanel extends LitElement {
         this._overallAhead.innerHTML = `Ahead: 00 : 00 : 00 : 00`;
         this._startButton.name = "play-circle";
         this._startButton.label = "start";
+        if (this._wakeLock) {
+            this._wakeLock.release().then(() => {
+                this._wakeLock = null;
+            });
+        }
     }
 
     _updateTimerDisplay() {
@@ -333,7 +355,6 @@ export class RacePanel extends LitElement {
 
     _computePaceinKm(splitIndex) {
         const split = this._splits[splitIndex];
-        console.log(split);
         let distanceKm = 0.4;
         if (this._distance === '1500' && splitIndex === 0) {
             distanceKm = 0.3;
@@ -367,7 +388,7 @@ export class RacePanel extends LitElement {
         // Convert milliseconds to minutes
         const timeMin = split / (1000 * 60);
 
-        const paceMinPerMile = timeMin / distanceMiles.toFixed(1);
+        const paceMinPerMile = timeMin / distanceMiles;
         const minutes = Math.floor(paceMinPerMile);
         const secondsDecimal = (paceMinPerMile - minutes) * 60;
         const seconds = Math.round(secondsDecimal);

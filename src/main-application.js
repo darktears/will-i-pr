@@ -9,6 +9,7 @@ import '@shoelace-style/shoelace/dist/components/switch/switch.js';
 import './setup-panel.js';
 import './race-panel.js';
 import './main-header.js';
+import './rotate-box.js';
 import { setBasePath } from '@shoelace-style/shoelace/dist/utilities/base-path.js';
 setBasePath('/will-i-pr/');
 
@@ -115,7 +116,8 @@ export class MainApplication extends LitElement {
 
   render() {
     return html`
-      <main-header @back-clicked="${this._backClicked}"></main-header> 
+      <main-header @back-clicked="${this._backClicked}"></main-header>
+      <rotate-box id="fullscreen-rotate"></rotate-box>
       <setup-panel @distance-changed="${this._distanceChanged}" @pr-changed="${this._prChanged}"></setup-panel>
       <race-panel></race-panel>
       <div class="alert-sw">
