@@ -247,6 +247,7 @@ export class RacePanel extends LitElement {
         this._timer = null;
         this._elapsedTime = 0;
         this._absoluteSplits = [];
+        this._wakeLock = null;
     }
 
     connectedCallback() {
